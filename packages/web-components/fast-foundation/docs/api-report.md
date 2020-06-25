@@ -795,6 +795,30 @@ export enum TextFieldType {
     url = "url"
 }
 
+// @public (undocumented)
+export class UnityHost extends FASTElement {
+    constructor();
+    // (undocumented)
+    buildjsonpath: string;
+    // (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    hostElement: HTMLElement;
+    // (undocumented)
+    hostStyle: string;
+    // (undocumented)
+    targetid: string;
+    // (undocumented)
+    uniqueId: string;
+    // (undocumented)
+    unityloaderpath: string;
+    }
+
+// @public (undocumented)
+export const UnityHostTemplate: import("@microsoft/fast-element").ViewTemplate<UnityHost, any>;
+
 
 // Warnings were encountered during analysis:
 //
