@@ -813,9 +813,9 @@ export class UnityHost extends FASTElement {
     // (undocumented)
     loadProgress: number;
     // (undocumented)
-    messageUnity(targetGameObject: string, targetFunction: string, param: any): void;
+    messageUnity: (targetGameObject: string, targetFunction: string, param: any) => void;
     // (undocumented)
-    subscribeEvent(eventName: string, callback: Function): void;
+    subscribeEvent: (eventName: string, callback: Function) => void;
     // (undocumented)
     targetid: string;
     // (undocumented)
@@ -823,7 +823,7 @@ export class UnityHost extends FASTElement {
     // (undocumented)
     unityloaderpath: string;
     // (undocumented)
-    unsubscribeEvent(eventName: string, callback: Function): void;
+    unsubscribeEvent: (eventName: string, callback: Function) => void;
 }
 
 // @public (undocumented)
