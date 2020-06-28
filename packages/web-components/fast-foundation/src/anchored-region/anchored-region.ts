@@ -18,6 +18,7 @@ declare global {
 }
 
 export type AxisPositioningMode = "uncontrolled" | "locktodefault" | "dynamic";
+export type AxisScalingMode = "anchor" | "availablespace" | "content";
 
 export type HorizontalPosition = "start" | "end" | "left" | "right" | "unset";
 
@@ -96,8 +97,8 @@ export class AnchoredRegion extends FASTElement {
         this.updateLayoutForAttributeChange();
     }
 
-    @attr({ attribute: "horizontal-scaling", mode: "boolean" })
-    public horizontalScaling: boolean = false;
+    @attr({ attribute: "horizontal-scaling" })
+    public horizontalScaling: AxisScalingMode = "content";
     private horizontalScalingChanged(): void {
         this.updateLayoutForAttributeChange();
     }
@@ -126,8 +127,8 @@ export class AnchoredRegion extends FASTElement {
         this.updateLayoutForAttributeChange();
     }
 
-    @attr({ attribute: "vertical-scaling", mode: "boolean" })
-    public verticalScaling: boolean = false;
+    @attr({ attribute: "vertical-scaling" })
+    public verticalScaling: AxisScalingMode = "content";
     private verticalScalingChanged(): void {
         this.updateLayoutForAttributeChange();
     }
@@ -517,11 +518,11 @@ export class AnchoredRegion extends FASTElement {
                 (this.positionerDimension.width - entry.contentRect.width);
         }
 
-        if (!this.horizontalScaling) {
+        if (this.horizontalScaling === "content") {
             this.positionerDimension.width = entry.contentRect.width;
         }
 
-        if (!this.verticalScaling) {
+        if (this.verticalScaling === "content") {
             this.positionerDimension.height = entry.contentRect.height;
         }
     };
@@ -779,9 +780,20 @@ export class AnchoredRegion extends FASTElement {
         this.regionRight = right === null ? "unset" : `${Math.floor(right).toString()}px`;
         this.regionLeft = left === null ? "unset" : `${Math.floor(left).toString()}px`;
         this.horizontalPosition = desiredHorizontalPosition;
-        this.regionWidth = this.horizontalScaling
-            ? `${Math.floor(nextPositionerDimension.width)}px`
-            : "fit-content";
+
+        switch (this.horizontalScaling) {
+            case "anchor":
+                this.regionWidth = `${Math.floor(this.anchorWidth)}px`;
+                break;
+
+            case "availablespace":
+                this.regionWidth = `${Math.floor(nextPositionerDimension.width)}px`;
+                break;
+
+            case "content":
+                this.regionWidth = "fit-content";
+                break;
+        }
     };
 
     /**
@@ -825,9 +837,20 @@ export class AnchoredRegion extends FASTElement {
         this.regionBottom =
             bottom === null ? "unset" : `${Math.floor(bottom).toString()}px`;
         this.verticalPosition = desiredVerticalPosition;
-        this.regionHeight = this.verticalScaling
-            ? `${Math.floor(nextPositionerDimension.height)}px`
-            : "fit-content";
+
+        switch (this.verticalScaling) {
+            case "anchor":
+                this.regionHeight = `${Math.floor(this.anchorHeight)}px`;
+                break;
+
+            case "availablespace":
+                this.regionHeight = `${Math.floor(nextPositionerDimension.height)}px`;
+                break;
+
+            case "content":
+                this.regionHeight = "fit-content";
+                break;
+        }
     };
 
     /**
@@ -1024,11 +1047,11 @@ export class AnchoredRegion extends FASTElement {
             width: this.positionerDimension.width,
         };
 
-        if (this.horizontalScaling) {
+        if (this.horizontalScaling === "availablespace") {
             newRegionDimension.width = this.getAvailableWidth(desiredHorizontalPosition);
         }
 
-        if (this.verticalScaling) {
+        if (this.verticalScaling === "availablespace") {
             newRegionDimension.height = this.getAvailableHeight(desiredVerticalPosition);
         }
 
